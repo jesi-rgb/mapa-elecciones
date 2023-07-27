@@ -33,13 +33,10 @@
 				id: 'elecciones-outline',
 				type: 'line',
 				source: 'elecciones',
-				layout: {
-					visibility: outlineVisibility ? 'visible' : 'none'
-				},
 				paint: {
 					'line-color': '#000',
-					'line-width': ['case', ['boolean', ['feature-state', 'hover'], false], 3, 0.3],
-					'line-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 1, 0.3]
+					'line-width': ['case', ['boolean', ['feature-state', 'hover'], false], 5, 0.3],
+					'line-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 1, 0.1]
 				}
 			});
 
@@ -101,12 +98,12 @@
 	});
 </script>
 
-<div class="flex flex-col lg:flex-row items-start w-[95%] lg:w-[80%] mx-auto my-10 justify-between">
+<div class="flex flex-col lg:flex-row items-start my-10 justify-between">
 	<div
 		id="map"
-		class="w-full mx-auto lg:mx-0 lg:w-3/4 h-[400px] lg:h-[800px] border-2 border-black mb-5 lg:mb-0"
+		class="w-full mx-auto lg:mx-0 lg:w-3/4 h-[400px] lg:h-[600px] border-2 border-black mb-5 lg:mb-0"
 	/>
-	<div class="flex flex-col text-2xl space-y-4 w-[95%] lg:w-1/4 lg:pl-2 tabular-nums">
+	<div class="flex flex-col text-2xl space-y-4 lg:w-1/4 lg:pl-2 tabular-nums">
 		{#if properties}
 			<Stat title="Provincia" value={properties['NPRO']} />
 			<Stat title="Municipio" value={properties['NMUN']} />
@@ -114,12 +111,12 @@
 				<Stat title="Distrito" value={properties['CDIS']} />
 				<Stat title="Sección" value={properties['CSEC']} />
 			</div>
-			<hr class="my-3" />
+			<br />
 			<Stat title="Ganador" value={properties['ganador']} />
 			<Stat title="%" value={properties['pganador']} />
 			<Stat title="Abstención" value={properties['abstencion'] + '%'} />
 		{:else}
-			<div>Selecciona una sección para analizar sus datos</div>
+			<div class="text-gray-700">Selecciona una sección para analizar sus datos</div>
 		{/if}
 	</div>
 </div>

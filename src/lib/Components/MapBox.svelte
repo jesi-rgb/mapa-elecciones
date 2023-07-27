@@ -104,7 +104,7 @@
 <div class="flex flex-col lg:flex-row items-start w-[95%] lg:w-[80%] mx-auto my-10 justify-between">
 	<div
 		id="map"
-		class="w-full mx-auto lg:mx-0 lg:w-3/4 h-[400px] lg:h-[800px] border-2 border-black"
+		class="w-full mx-auto lg:mx-0 lg:w-3/4 h-[400px] lg:h-[800px] border-2 border-black mb-5 lg:mb-0"
 	/>
 	<div class="flex flex-col text-2xl space-y-4 w-[95%] lg:w-1/4 lg:pl-2 tabular-nums">
 		{#if properties}
@@ -118,6 +118,8 @@
 			<Stat title="Ganador" value={properties['ganador']} />
 			<Stat title="%" value={properties['pganador']} />
 			<Stat title="Abstención" value={properties['abstencion'] + '%'} />
+		{:else}
+			<div>Selecciona una sección para analizar sus datos</div>
 		{/if}
 	</div>
 </div>

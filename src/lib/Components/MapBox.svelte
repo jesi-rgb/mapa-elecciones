@@ -101,9 +101,12 @@
 	});
 </script>
 
-<div class="flex items-start w-[80%] mx-auto my-10 justify-between">
-	<div id="map" class="w-3/4 h-[800px] border-2 border-black" />
-	<div class="flex flex-col text-2xl space-y-4 w-1/4 pl-2 tabular-nums">
+<div class="flex flex-col lg:flex-row items-start w-[95%] lg:w-[80%] mx-auto my-10 justify-between">
+	<div
+		id="map"
+		class="w-full mx-auto lg:mx-0 lg:w-3/4 h-[400px] lg:h-[800px] border-2 border-black"
+	/>
+	<div class="flex flex-col text-2xl space-y-4 w-[95%] lg:w-1/4 lg:pl-2 tabular-nums">
 		{#if properties}
 			<Stat title="Provincia" value={properties['NPRO']} />
 			<Stat title="Municipio" value={properties['NMUN']} />

@@ -8,9 +8,23 @@
 
 	let hoveredPolygonId = null;
 	let properties;
+
+	$: if (hoveredPolygonId == null) {
+		properties = undefined;
+	}
+
 	let map;
-	let outlineVisibility = false;
-	$: console.log(outlineVisibility);
+	let electionVisibility = true;
+	let incomeVisibility = true;
+
+	function showElectionData() {
+		map.setLayoutProperty('elecciones-fill', 'visibility', 'visible');
+		map.setLayoutProperty('renta-fill', 'visibility', 'none');
+	}
+	function showIncomeData() {
+		map.setLayoutProperty('elecciones-fill', 'visibility', 'none');
+		map.setLayoutProperty('renta-fill', 'visibility', 'visible');
+	}
 
 	onMount(async () => {
 		map = new mapboxgl.Map({
@@ -31,6 +45,42 @@
 
 			map.addLayer({
 				id: 'elecciones-outline',
+				type: 'line',
+				source: 'elecciones',
+				paint: {
+					'line-color': '#000',
+					'line-width': ['case', ['boolean', ['feature-state', 'hover'], false], 5, 0.3],
+					'line-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 1, 0.1]
+				}
+			});
+
+			map.addLayer({
+				id: 'renta-fill',
+				type: 'fill',
+				source: 'elecciones', // reference the data source
+				layout: {
+					visibility: 'none'
+				},
+				paint: {
+					'fill-color': [
+						'interpolate-hcl',
+						['linear'],
+						['to-number', ['get', 'renta_mediana'], 0],
+						0,
+						'#eee',
+						5000,
+						'tomato',
+						25000,
+						'Gold',
+						40000,
+						'steelblue'
+					],
+					'fill-opacity': 0.9
+				}
+			});
+
+			map.addLayer({
+				id: 'renta-outline',
 				type: 'line',
 				source: 'elecciones',
 				paint: {
@@ -89,7 +139,27 @@
 			}
 		});
 
+		map.on('mousemove', 'renta-fill', (e) => {
+			if (e.features.length > 0) {
+				if (hoveredPolygonId !== null) {
+					map.setFeatureState({ source: 'elecciones', id: hoveredPolygonId }, { hover: false });
+				}
+
+				hoveredPolygonId = e.features[0].id;
+				properties = e.features[0].properties;
+
+				map.setFeatureState({ source: 'elecciones', id: hoveredPolygonId }, { hover: true });
+			}
+		});
+
 		map.on('mouseleave', 'elecciones-fill', () => {
+			if (hoveredPolygonId !== null) {
+				map.setFeatureState({ source: 'elecciones', id: hoveredPolygonId }, { hover: false });
+			}
+			hoveredPolygonId = null;
+		});
+
+		map.on('mouseleave', 'renta-fill', () => {
 			if (hoveredPolygonId !== null) {
 				map.setFeatureState({ source: 'elecciones', id: hoveredPolygonId }, { hover: false });
 			}
@@ -103,7 +173,15 @@
 		id="map"
 		class="w-full mx-auto lg:mx-0 lg:w-3/4 h-[400px] lg:h-[600px] border-2 border-black mb-5 lg:mb-0"
 	/>
-	<div class="flex flex-col text-2xl space-y-4 lg:w-1/4 lg:pl-2 tabular-nums">
+	<div class="flex flex-col text-xl space-y-4 lg:w-1/4 lg:pl-2 tabular-nums">
+		<div class="flex justify-between mx-auto space-x-1">
+			<button class="p-4 font-bold bg-blue-200" on:click={() => showElectionData()}
+				>Mostrar Votos</button
+			>
+			<button class="p-4 font-bold bg-blue-200" on:click={() => showIncomeData()}
+				>Mostrar Renta</button
+			>
+		</div>
 		{#if properties}
 			<Stat title="Provincia" value={properties['NPRO']} />
 			<Stat title="Municipio" value={properties['NMUN']} />
@@ -115,6 +193,11 @@
 			<Stat title="Ganador" value={properties['ganador']} />
 			<Stat title="%" value={properties['pganador']} />
 			<Stat title="Abstención" value={properties['abstencion'] + '%'} />
+			<Stat title="Renta Mediana Anual (2018)" value={properties['renta_mediana'] + '€'} />
+			<Stat
+				title="Renta Mediana Mensual (2018)"
+				value={(Number.parseInt(properties['renta_mediana']) / 12).toFixed(2) + '€'}
+			/>
 		{:else}
 			<div class="text-gray-700">Selecciona una sección para analizar sus datos</div>
 		{/if}

@@ -14,8 +14,6 @@
 	}
 
 	let map;
-	let electionVisibility = true;
-	let incomeVisibility = true;
 
 	function showElectionData() {
 		map.setLayoutProperty('elecciones-fill', 'visibility', 'visible');
@@ -168,38 +166,56 @@
 	});
 </script>
 
-<div class="flex flex-col lg:flex-row items-start my-10 justify-between">
+<div class="flex flex-col lg:flex-row items-start my-10 justify-between h-full">
 	<div
 		id="map"
-		class="w-full mx-auto lg:mx-0 lg:w-3/4 h-[400px] lg:h-[600px] border-2 border-black mb-5 lg:mb-0"
+		class="w-full mx-auto lg:mr-3 lg:w-[60%] h-[400px] lg:h-[600px] border-2 border-black mb-5 lg:mb-0"
 	/>
-	<div class="flex flex-col text-xl space-y-4 lg:w-1/4 lg:pl-2 tabular-nums">
-		<div class="flex justify-between mx-auto space-x-1">
-			<button class="p-4 font-bold bg-blue-200" on:click={() => showElectionData()}
-				>Mostrar Votos</button
+	<div class="flex flex-col text-xl space-y-4 w-full lg:w-[40%] border h-full">
+		<div class="flex justify-around space-x-1">
+			<button
+				class="p-4 font-bold bg-blue-200 hover:bg-blue-300 transition-colors shadow-blue-800/30 shadow-md rounded-md"
+				on:click={() => showElectionData()}>Mostrar Votos</button
 			>
-			<button class="p-4 font-bold bg-blue-200" on:click={() => showIncomeData()}
-				>Mostrar Renta</button
+			<button
+				class="p-4 font-bold bg-blue-200 hover:bg-blue-300 transition-colors shadow-blue-800/30 shadow-md rounded-md"
+				on:click={() => showIncomeData()}>Mostrar Renta</button
 			>
 		</div>
-		{#if properties}
-			<Stat title="Provincia" value={properties['NPRO']} />
-			<Stat title="Municipio" value={properties['NMUN']} />
-			<div class="text-base">
-				<Stat title="Distrito" value={properties['CDIS']} />
-				<Stat title="Sección" value={properties['CSEC']} />
-			</div>
-			<br />
-			<Stat title="Ganador" value={properties['ganador']} />
-			<Stat title="%" value={properties['pganador']} />
-			<Stat title="Abstención" value={properties['abstencion'] + '%'} />
-			<Stat title="Renta Mediana Anual (2018)" value={properties['renta_mediana'] + '€'} />
-			<Stat
-				title="Renta Mediana Mensual (2018)"
-				value={(Number.parseInt(properties['renta_mediana']) / 12).toFixed(2) + '€'}
-			/>
-		{:else}
-			<div class="text-gray-700">Selecciona una sección para analizar sus datos</div>
-		{/if}
+		<div class="border h-full flex flex-col space-y-10">
+			{#if properties}
+				<div>
+					<div class="font-bold text-2xl">Datos de provincia</div>
+					<div class="grid grid-cols-2">
+						<Stat title="Provincia" value={properties['NPRO']} />
+						<Stat title="Municipio" value={properties['NMUN']} />
+						<Stat title="Distrito" value={properties['CDIS']} />
+						<Stat title="Sección" value={properties['CSEC']} />
+					</div>
+				</div>
+				<div>
+					<div class="font-bold text-2xl">Datos electorales</div>
+					<div class="flex flex-row justify-start space-x-10">
+						<Stat title="Ganador" value={properties['ganador']} />
+						<Stat title="%" value={properties['pganador']} />
+						<Stat title="Abstención" value={properties['abstencion'] + '%'} />
+					</div>
+				</div>
+				<div>
+					<div class="font-bold text-2xl">Datos económicos</div>
+					<div class="flex flex-row space-x-4">
+						<Stat title="Renta Mediana Anual (2018)" value={properties['renta_mediana'] + '€'} />
+						<Stat
+							title="Renta Mediana Mensual (2018)"
+							value={(Number.parseInt(properties['renta_mediana']) / 12).toFixed(2) + '€'}
+						/>
+					</div>
+				</div>
+			{:else}
+				<div class="text-gray-700 font-bold h-full">
+					Selecciona una sección para analizar sus datos
+				</div>
+			{/if}
+		</div>
 	</div>
 </div>

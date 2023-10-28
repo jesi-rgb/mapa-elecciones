@@ -3,7 +3,7 @@
 	import Footer from '../lib/Components/Footer.svelte';
 </script>
 
-<div class="w-[95%] lg:w-3/4 mx-auto">
+<div class="w-[95%] my-20 mx-auto">
 	<slot />
 	<Footer />
 </div>

@@ -6,6 +6,9 @@
 			class="text-blue-600 underline"
 			href="https://www.eldiario.es/politica/votaciones-elecciones-generales-23j-por-calles_1_10377837.html"
 			>elDiario.es</a
+		>. Maquetado en
+		<a class="text-blue-600 underline" href="http://weiweihuanghuang.github.io/Work-Sans/"
+			>Work Sans</a
 		>.
 	</footer>
 </div>
